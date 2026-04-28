@@ -32,4 +32,19 @@ def cal_confidence(text, predicted_class):
 text_with_context ="ละเมิดลิขสิทธิ์มาตรา 27 แห่ง พ.ร.บ. ลิขสิทธิ์"
 conf,sig = cal_confidence(text_with_context, 2)
 print(f"Confidence:{conf:2f}")
-         
+print(f"Signal:  {sig}")
+
+#3.ลำดับศักดิ์
+def get_physic_gate_preview(predicted_class, text):
+    # 0:None, 1: Patent  (High Complexity) , 2: Copyright (medium Complexity)
+    weight = {0:1, 1:8.5, 2:6.5}
+    base_weight = weight.get(predicted_class, 1.0)
+    #ปรับน้ำหนักตามความรุนแรงที่อยู่ในข้อความ
+    if "ร้ายแรง" in text or "จำนวนมาก" in text:
+        base_weight = min(base_weight+1.0,10)
+        return base_weight
+#Run Program
+text = "การละเมิดสิทธิบัตรรายใหญ่"
+weight = get_physic_gate_preview(1,"text")
+print(f"Physic Gate Weight review: {weight}/10.0")
+
